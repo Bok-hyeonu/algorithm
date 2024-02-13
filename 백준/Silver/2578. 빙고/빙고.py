@@ -1,5 +1,5 @@
-row_bingo = [1, 2, 3, 4, 5]
-col_bingo = [1, 2, 3, 4, 5]
+row_bingo = [0, 1, 2, 3, 4]
+col_bingo = [0, 1, 2, 3, 4]
 cnt = rcnt = dcnt = 0
 
 # 철수와 진행자의 빙고판을 각각 1차원 배열로 받습니다.
@@ -11,7 +11,6 @@ for _ in range(5): # 철수 리스트
 for _ in range(5): # mc 리스트
     mc_list += list(map(int, input().split()))
 
-# 3빙고를 위해 최소로 칠해야 할 개수는 12개
 for i in range(11): 
     # 따라서 11개까지는 빙고 여부를 판별하지 않음
     idx = cheolsu_list.index(mc_list[i])
@@ -19,19 +18,19 @@ for i in range(11):
 
 for i in range(11, 25): # 12개 이후부터 판별
     idx = cheolsu_list.index(mc_list[i])
-    cheolsu_list[idx] = 0 # 일치하는 칸을 칠함
+    cheolsu_list[idx] = 0 
     
     # 행 조사
-    for row in row_bingo: # 아직 빙고가 아닌 가로줄들을 순회하며
-        hap = sum(cheolsu_list[(row-1)*5:(row-1)*5+5])
+    for row in row_bingo:
+        hap = sum(cheolsu_list[row*5:row*5+5])
         if hap == 0: # 가로줄이 모두 칠해졌다면
             row_bingo.remove(row) # 해당 가로줄을 빙고 후보에서 제거 
             cnt += 1 # 개수 1 증가
             break # 한 번에 하나의 빙고 밖에 존재하지 않음
             
     # 열 조사
-    for col in col_bingo: # 아직 빙고가 아닌 세로줄들을 순회하며
-        hap = sum(cheolsu_list[(col-1)::5])
+    for col in col_bingo: 
+        hap = sum(cheolsu_list[col::5])
         if hap == 0: # 세로줄이 모두 칠해졌다면
             col_bingo.remove(col) # 해당 세로줄을 후보에서 제거
             cnt += 1 # 빙고 수 1 증가
