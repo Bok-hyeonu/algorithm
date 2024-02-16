@@ -1,13 +1,12 @@
-
 def solution(s):
-    num_dict = {'zero': '0','one':'1', 'two':'2', 'three':'3', 'four':'4',
-               'five':'5', 'six':'6', 'seven':'7', 'eight':'8', 'nine':'9'}
     
     answer = ''
-    while s:
-        if s[0].isdigit():
+    # 해석할 문자열이 남은 동안에
+    while s: 
+        if s[0].isdigit(): # 문자열이 숫자면 그대로
             answer += s[0]
             s = s[1:]
+        # 이후부터는 짝에 맞게 변환
         elif s[0]=='z':
             answer += '0'
             s = s[4:]
