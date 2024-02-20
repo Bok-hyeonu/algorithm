@@ -1,6 +1,7 @@
-N = int(input())                            # N : 기둥의 개수
+import sys
+N = int(sys.stdin.readline())               # N : 기둥의 개수
 # 왼쪽 위치와 높이를 받습니다.
-pils = [list(map(int, input().split())) for _ in range(N)]
+pils = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
 pils.sort()                                 # 정렬(키값은 자동으로 기둥의 왼쪽 값이 기준이 됩니다.)
 heights = [row[1] for row in pils]
 max_hei = max(heights)
