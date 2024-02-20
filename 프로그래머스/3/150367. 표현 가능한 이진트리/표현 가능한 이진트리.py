@@ -1,3 +1,6 @@
+# 입력받은 수의 포화이진트리 형태의 이진수열과 그 깊이를 반환하는 함수
+# 예 : 8을 입력받은 경우 1000이 아닌 0001000을 반환한다.
+# 포화이진트리의 경우 원소 수가 2^1 - 1, 2^2 - 1, 2^3 - 1이어야 하기 때문
 def bin_tree(number):                       
     i = 1                                   # 트리의 깊이
     while True:                             # 깊이 i인 트리에 number를 2진 형태로 모두 저장할 수 있으면
@@ -15,7 +18,7 @@ def bin_tree(number):
     return ans[::-1], i                     # 2진수열과 깊이를 반환
 
 
-def postorder(bins, p, f):
+def postorder(bins, p, f):                  # bins : 포화이진수열, p : 현재 노드, f : 현재 노드에서 탐색할 범위
     if f > 1:
         f //= 2
         a = postorder(bins, p - f, f)
@@ -43,6 +46,7 @@ def solution(numbers):
     answer = []
     for number in numbers:
         answ, depth = bin_tree(number)
+        # 포화이진트리의 경우 루트 노드는 2^(깊이-1) - 1을 인덱스로 가짐
         result = postorder(answ, 2 ** (depth - 1) - 1, 2 ** (depth - 1))
         result = 0 if result < 1 else 1
         answer.append(result)
