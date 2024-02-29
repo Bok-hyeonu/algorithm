@@ -9,11 +9,12 @@ for _ in range(M):
     n1, n2 = map(int, sys.stdin.readline().split())
     adjl[n1].append(n2)
     adjl[n2].append(n1)
-q = [0]*(N*(N+1))
+q = [0]*(N*(N+1)//2)
 front = rear = -1
 rear += 1
 q[rear] = 1
 cnt = 1
+visited[1] = 1
 
 # 하나라도 방문하지 않은 정점이 있으면, 모든 연결 요소를 확인한 것이 아님
 while not all(visited):
@@ -25,10 +26,10 @@ while not all(visited):
                 rear += 1
                 q[rear] = i
                 cnt += 1
+                visited[i] = 1
                 break
     front += 1 # deque
     t = q[front] 
-    visited[t] = 1
     for adj in adjl[t]:
         if visited[adj] == 0: # 방문한 정점이 아니면
             rear += 1 # 방문할 정점에 추가
