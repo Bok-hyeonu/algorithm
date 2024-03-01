@@ -32,8 +32,8 @@ for _ in range(N):
         heap[end] = x # 힙을 확장하여 마지막 노드에 삽입
         chi = end # 자식 인덱스
         while chi > 1: # 루트 노드에 도달할 때까지
-            if heap[chi] < heap[chi//2] : # 자식 노드가 부모 노드보다 더 큰 경우
+            if heap[chi] < heap[chi//2] : # 부모 노드가 자식 노드보다 큰 경우
                 heap[chi], heap[chi//2] = heap[chi//2], heap[chi] # 두 값 변경
                 chi //= 2
-            else: # 부모가 더 크다면
+            else: # 부모가 더 작다면
                 break # 그 자리가 자식 노드의 자리
