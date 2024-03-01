@@ -16,7 +16,7 @@ for _ in range(N):
             par = 1                 # 부모 노드
             while par*2 <= end:     # 자식 노드가 없을 때까지
                 chi = par*2         # 기본 비교 대상은 왼쪽 자식  
-                # 단, 자식이 둘이고 오른쪽 자식이 더 큰 경우             
+                # 단, 자식이 둘이고 오른쪽 자식이 더 작은 경우             
                 if par*2 != end and heap[par*2] > heap[par*2+1]:  
                     chi += 1 # 오른쪽 자식과 비교
                 # 부모 - 자식 비교
