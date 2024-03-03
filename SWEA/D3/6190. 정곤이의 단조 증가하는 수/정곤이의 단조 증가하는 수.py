@@ -6,11 +6,15 @@ for tc in range(1, T + 1):
     for i in range(N-1):
         for j in range(i+1, N):
             n = A[i]*A[j]
-            num = list(map(int, str(n)))
-            for k in range(1, len(num)):
-                if num[k] < num[k-1]:
+            n2 = n
+            if res > n2:
+                continue
+            while n > 0:
+                t1 = n % 10
+                n //= 10
+                t2 = n % 10
+                if t2 > t1:
                     break
             else:
-                if res < n:
-                    res = n
-    print(f'#{tc}', res)   
+                res = n2
+    print(f'#{tc}', res)  
