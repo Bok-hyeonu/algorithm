@@ -3,7 +3,7 @@ import sys
 N, K = map(int, sys.stdin.readline().split()) # N : 물건의 수, K : 배낭의 용량
 # N개의 물건을 받음
 stuffs = [tuple(map(int, sys.stdin.readline().split())) for _ in range(N)]
-# 편의를 위해 무게 0, 가치 0의 물건을 추가
+# 편의를 위해 무게 0, 가치 0의 물건을 추가 
 stuffs.insert(0, (0, 0)) 
 
 # 냅색 알고리즘을 위한 판(N+1 by K+1 사이즈)(값으로는 가치를 저장함)
