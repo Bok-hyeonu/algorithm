@@ -5,8 +5,8 @@ def f(i, k):
     else:
         for j in range(N):
             if j not in col[:i]: # 같은 세로 줄에는 퀸을 놓을 수 없음
-                if (i+j) not in re[:i]: # 반대각 줄에는 퀸을 놓을 수 없음
-                    if (i-j) not in fo[:i]: # 정대각 줄에는 퀸을 놓을 수 없음 
+                if (i-j) not in fo[:i]: # 정대각 줄에는 퀸을 놓을 수 없음 
+                    if (i+j) not in re[:i]: # 반대각 줄에는 퀸을 놓을 수 없음
                         fo[i] = i-j # 정대각
                         re[i] = i+j  # 반대각
                         col[i] = j # 열
