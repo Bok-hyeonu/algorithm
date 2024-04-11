@@ -1,69 +1,59 @@
-# 3190. 뱀
-
-# 고려할 종료 조건
-# 1. 벽에 부딪힌 경우(유효범위 밖인 경우)
-# 2. 자신의 몸에 부딪힌 경우
-# 진행
-# 1. 시간이 증가하고 뱀이 이동한다.
-# 2. 유효범위가 아니면(벽에 부딪히면) 종료한다.
-# 3. 사과가 있으면 길이가 증가한다.
-# 4. 자신에 닿으면 종료한다.
-# 5. 방향을 바꿔야 하는 경우 변경한다.
-
-dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)] # 우하상좌
-import sys
+# 백준 3190. 뱀
 from collections import deque
 
-N = int(sys.stdin.readline()) # 보드의 크기
-K = int(sys.stdin.readline()) # 사과의 개수
+dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
+# 보드의 크기 입력 및 보드 생성
+N = int(input())
 board = [[0]*N for _ in range(N)]
-snakes = [[-5]*N for _ in range(N)]
 
-# 사과의 위치 표시
+# 사과의 개수
+K = int(input())
+
+# 사과의 위치 입력
+apples = []
 for _ in range(K):
-    i, j = map(int, sys.stdin.readline().split())
-    board[i-1][j-1] = 1 # 사과 표시
+    R, C = map(int, input().split())
+    apples.append((R-1, C-1))
+    board[R-1][C-1] = 1
 
-L = int(sys.stdin.readline()) # 방향 전환의 수
-# 방향 전환
-rotating = deque([tuple(sys.stdin.readline().split()) for _ in range(L)])
+# 방향 변환 횟수 입력 및 변환 정보 저장
+L = int(input())
+change_dirs = {}
+for _ in range(L):
+    change_time, change_dir = input().split()
+    # change_time 초가 끝난 뒤에 방향 전환을 하므로, 시간에 +1을 해줌
+    change_dirs[int(change_time)+1] = change_dir
+# 좌표
+start = (0, 0)
 
-sec = 0         # 소요 시간
-d = 0           # 방향(시작은 우측)
-di, dj = 0, 0   # 현재 위치
-size = 1        # 뱀의 크기
-snakes[di][dj] = sec
-while True:
-    sec += 1 # 소요 시간 증가
-    
-    # 뱀 이동
-    di += dirs[d][0]
-    dj += dirs[d][1]
-    
-    # 종료조건 1(유효범위가 아닌 경우)
-    if not 0<= di < N or not 0<= dj < N:
+# 자신의 몸에 닿으면 게임을 끝내야하기 때문에, 몸의 좌표를 전부 저장해야함
+# 저장해서 움직이는 몸의 좌표는 q
+q = deque([start])
+time = 0
+d = 0
+
+while q:
+    time += 1
+    # 현재 시간에 방향전환을 해야하면, D/L 여부에 따라 방향 전환을 해줌
+    if time in change_dirs:
+        if change_dirs[time] == 'D':
+            d += 1
+        else:
+            d -= 1
+
+    # 우선 머리 좌표와 방향을 기준으로 다음 머리 좌표를 구하고 유효성 검사 실시
+    cur = q[-1]
+    di, dj = cur[0] + dirs[d%4][0], cur[1] + dirs[d%4][1]
+    # 게임이 종료되는 조건
+    if di < 0 or di >= N or dj < 0 or dj >= N or (di, dj) in q:
         break
-    
-    # 사과가 있으면 길이 증가
-    if board[di][dj]: 
-        size += 1
+    # 사과를 먹은 조건에는 머리만 붙임
+    elif board[di][dj]:
+        q.append((di, dj))
         board[di][dj] = 0
-    
-    # 종료조건 2(현 위치가 본인 몸에 닿은 경우)
-    if sec - snakes[di][dj] <= size:
-        break
-    
-    # 뱀 이동 현황 표시
-    snakes[di][dj] = sec
-    
-    # 방향을 바꿔야 한다면 방향 변경
-    if rotating:
-        if int(rotating[0][0]) == sec:
-            info = rotating.popleft()
-            if info[1] == 'D':  # 우측 회전
-                d = (d+1) % 4
-            else:               # 좌측 회전
-                d = (d-1) % 4
-
-print(sec)
+    # 사과를 안먹은 조건에는 꼬리를 떼고 머리를 붙임
+    else:
+        q.append((di, dj))
+        q.popleft()
+print(time)
