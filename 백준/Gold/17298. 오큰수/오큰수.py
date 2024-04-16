@@ -1,28 +1,17 @@
-# 17298 오큰수
+# 백준 17298. 오큰수
 
-# 1. 빈 오큰수 배열을 생성(초기값은 -1)
-# 2. 오큰수를 찾지 못한 위치를 저장할 빈 스택을 생성
-# 3. 수열을 앞에서부터 순회하며 
-# 4. 스택 상단에 저장된 위치의 수가 현재 수보다 작으면 현재 수가 스택 상단의 오큰수
-# 5. 4의 과정을 스택 상단에 저장된 위치의 수가 현재 수보다 크거나 같아질 때까지
-# 혹은 스택이 빌 때까지 반복
-# 6. 4, 5 과정을 수열의 마지막 수까지 반복
-# 7. 스택에 남아 있는 수는 모두 오큰수가 존재하지 ㅇ낳음
-
+# 수열의 크기 N 입력
 N = int(input())
-array = list(map(int, input().split())) # 수열
+# 수열 A 입력
+A = [int(x) for x in input().split()]
+NGE = [-1] * N
 
-correct = [-1]*N    # 오큰수를 저장할 배열을 생성(초기 상태는 모두 찾지 못한 -1)
-stack = [0]*N       # 스택(오큰수를 찾지 못한 위치)
-top = -1
+stack = [0]
 
-for i in range(N):  # 각 수열을 순회하며
-    # 스택 상단 위치의 오큰수를 발견한 경우
-    while top != -1 and array[stack[top]] < array[i]:
-        correct[stack[top]] = array[i] # 해당 위치에 오큰수 삽입
-        top -= 1        # 오큰수를 찾은 위치는 pop
-        
-    top += 1
-    stack[top] = i      # 현재 위치 push
+for i in range(N):
+    while stack and A[stack[-1]] < A[i]:
+        NGE[stack.pop()] = A[i]
+    stack.append(i)
 
-print(*correct)         # 출력
+print(*NGE)
+
