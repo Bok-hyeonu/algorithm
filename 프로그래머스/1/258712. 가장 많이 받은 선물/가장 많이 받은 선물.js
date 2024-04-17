@@ -1,66 +1,49 @@
 function solution(friends, gifts) {
-  let gifted = {}; // gifted = {"friend 이름": {"선물 준 친구 이름": 이 친구에게 준 선물 개수}}
-  let gift_idx = {}; // 선물 지수
+  const gifted = {}; // 친구A : {A가 선물 준 B : B에 준 선물 개수}
+  const gift_idx = {}; // 선물 인덱스(준 개수 - 받은 개수)
   // 딕셔너리 초기화
-  for (const friend of friends) {
-    gifted[friend] = {};
-    gift_idx[friend] = 0;
+  // 친구들에 딕셔너리 부여
+  for (const elem of friends) {
+    gifted[elem] = {};
+    gift_idx[elem] = 0;
   }
 
-  for (const gift of gifts) {
-    const temp = gift.split(" ");
-    const t = temp[0]; // t: 선물을 준 사람, f: 받은 사람
-    const f = temp[1]; // t: 선물을 준 사람, f: 받은 사람
-
+  for (const elem of gifts) {
+    // t : 선물을 준 사람, f : 선물을 받은 사람
+    const [t, f] = elem.split(" ");
+    // 선물 준 적 있으면 + 1
     if (f in gifted[t]) {
       gifted[t][f] += 1;
     } else {
+      // 선물 준 적 없으면 생성
       gifted[t][f] = 1;
     }
-    // 선물 지수 반영
+    // 준 사람 + 1, 받은 사람 - 1
     gift_idx[t] += 1;
     gift_idx[f] -= 1;
   }
-
-  // 각자 받게 될 선물 개수
-  let will_get = [];
-  for (const _ in friends) {
-    will_get.push(0);
-  }
-  // friends 리스트 순서대로 저장
-  let len_friends = 0;
-  for (const _ of friends) {
-    len_friends += 1;
-  }
-  let a;
-  let b;
-  for (i = 0; i < len_friends; i++) {
-    const curr = friends[i]; // 인덱스 i에 해당하는 친구
-    for (j = i + 1; j < len_friends; j++) {
-      const another = friends[j]; // 인덱스 j에 해당하는 친구
-      // curr가 another에게 준 선물 개수
-      if (another in gifted[curr]) {
-        a = gifted[curr][another];
-      } else {
-        a = 0;
-      }
-      // another가 curr에게 준 선물 개수
-      if (curr in gifted[another]) {
-        b = gifted[another][curr];
-      } else {
-        b = 0;
-      }
-
+  // 전체 인원 만큼 0 배열 생성
+  const will_get = Array.from({ length: friends.length }, () => 0);
+  //
+  for (let i = 0; i < friends.length; i++) {
+    const curr = friends[i]; // 친구 A
+    for (let j = i + 1; j < friends.length; j++) {
+      const another = friends[j]; // 친구 B
+      // A가 B에게 준 개수
+      const a = another in gifted[curr] ? gifted[curr][another] : 0;
+      // B가 A에게 준 개수
+      const b = curr in gifted[another] ? gifted[another][curr] : 0;
       if (a > b) {
-        // curr가 선물을 더 많이 줬다면
+        // A가 더 많이 주면 A가 받을 개수 + 1
         will_get[i] += 1;
       } else if (a < b) {
-        // another가 선물을 더 많이 줬다면
+        // B가 더 많이 주면 B가 받을 개수 + 1
         will_get[j] += 1;
-      } else if (a === b) {
-        // 둘이 선물을 주고 받은 개수가 같다면 선물 지수 확인
+      } else {
+        // 주고받은 개수가 같으면
         const ai = gift_idx[curr];
         const bi = gift_idx[another];
+        // 선물 지수가 큰 사람 받을 개수 + 1
         if (ai > bi) {
           will_get[i] += 1;
         } else if (ai < bi) {
@@ -69,7 +52,8 @@ function solution(friends, gifts) {
       }
     }
   }
-
+  // 최대 반환
   const answer = Math.max(...will_get);
+
   return answer;
 }
