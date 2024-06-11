@@ -4,11 +4,13 @@
 # 2. 10의 7승까지의 소수 여부를 구한다.(그 이후는 제곱해서 10의 14승이 되지 않는다)
 # 3. 2부터 10의 7승까지 소수를 제곱하며 A, B 범위 내의 거의 소수의 수를 구한다.
 
+import math
+
 A, B = map(int, input().split())
 nums = [i for i in range(10000001)]  # 10의 7승까지
 
 # 이 수가 소수인지 확인(에라토스테네스의 체를 이용)
-for i in range(2, int(len(nums)**(1/2))+1):
+for i in range(2, int(math.sqrt(len(nums)))+1):
     if nums[i] == 0:
         continue
     # 배수도 소수가 아니므로 처리
