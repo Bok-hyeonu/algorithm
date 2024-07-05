@@ -18,6 +18,7 @@ def dfs(t, depth, total):
     global max_total
     # 종료조건
     if depth == 4:
+        # 최댓값 갱신
         if total > max_total:
             max_total = total
         return
@@ -53,14 +54,16 @@ def checkT(t):
         direcs.sort()
         direcs.pop(0)
     total = sum(direcs) + board[t[0]][t[1]]
+    # 최댓값 갱신
     if total > max_total:
         max_total = total
-    
+
+# 모든 지점에 대해 탐색 수행
 for i in range(N):
     for j in range(M):
         visited[i][j] = 1
-        dfs((i, j), 1, board[i][j])
-        checkT((i, j))
+        dfs((i, j), 1, board[i][j]) # 깊이 4
+        checkT((i, j))              # T자 탐색
         visited[i][j] = 0
 
 print(max_total)
