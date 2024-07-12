@@ -6,7 +6,6 @@
 # 4. 다른 친구 관계도 탐색하며 사탕을 빼앗을 수 있는 최댓값을 계산한다.(DP)
 
 import sys
-from collections import deque
 input = sys.stdin.readline
 
 # 아이들의 수(노드), 친구 관계 수(간선), 최소 아이 수
@@ -27,33 +26,41 @@ for _ in range(M):
 visited = [0]*(N+1) # 탐색 여부
 
 def bfs(start): # 시작 위치
-    q = deque([start])
+    q = [start]
     visited[start] = 1      # 뺏음 표시
     cnt = 1                 # 뺏은 친구의 수
     total = candies[start]  # 사탕의 수
+    iscaught = False        # 스브러스가 걸렸는지 확인하는 변수
     while q:
-        now = q.popleft()       # 확인할 친구
-        for t in connects[now]: # 친구들을 순회하며
-            if not visited[t]:  # 뺏은 적이 없다면 뺏음
-                cnt += 1
-                total += candies[t]
-                visited[t] = 1  # 방문 표시
-                q.append(t)     # 다음에 탐색할 친구 관계
+        new_q = []          # 다음에 방문할 친구 수
+        for now in q:       # 이전에 방문한 친구들의
+            for t in connects[now]: # 친구들을 순회하며
+                if not visited[t]:  # 뺏은 적이 없다면 뺏음
+                    cnt += 1
+                    total += candies[t]
+                    visited[t] = 1
+                    new_q.append(t)
+        q = new_q
+    
+    # 울음소리가 공명한다면 스브러스는 걸림
+    if cnt >= K:
+        iscaught = True
+    
+    return iscaught, total, cnt
 
-    return total, cnt
-
-# BFS를 통해 각 컴포넌트의 사탕 수와 친구 수를 계산
-components = []
-for i in range(1, N + 1):
+DP = [0]*(K)
+# 각 친구들을 순회하며 최다 사탕 수 탐색
+for i in range(1, N+1):
     if not visited[i]:
-        candy, kids = bfs(i)
-        if kids < K:
-            components.append((kids, candy))
+        iscaught, candy, kids = bfs(i)
+        if iscaught:
+            continue
+        # 최다 사탕 수 갱신
+        for j in range(K-1, kids-1, -1):
+            DP[j] = max(DP[j], DP[j-kids] + candy)
 
-# DP를 통해 최다 사탕 수를 계산
-DP = [0] * K
-for kids, candy in components:
-    for j in range(K - 1, kids - 1, -1):
-        DP[j] = max(DP[j], DP[j - kids] + candy)
-        
+# 재순회하며 최댓값 갱신
+for i in range(1, K):
+    DP[i] = max(DP[i], DP[i-1])
+
 print(DP[K-1])    # 최다 사탕 수
