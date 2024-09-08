@@ -18,9 +18,7 @@ DP = [[0 for _ in range(N)] for _ in range(N)]  # 연산 수를 저장할 배열
 # 구간의 길이마다 모두 계산
 for term in range(1, N):
   # 가능한 모든 시점에서 구간의 길이까지의 연산 수를 구함
-  for st in range(N):
-    if st + term == N:
-      break
+  for st in range(N - term):
     # 최초 충분히 큰 수로 초기화
     DP[st][st + term] = int(1e9)
     # 시점부터 종점까지 순회하며
@@ -30,4 +28,4 @@ for term in range(1, N):
       DP[st][st + term] = min(DP[st][st + term], 
                               DP[st][t] + DP[t + 1][st + term] + matrixs[st][0]*matrixs[t][1]*matrixs[st + term][1])
 
-print(DP[0][-1])
+print(DP[0][- 1])
